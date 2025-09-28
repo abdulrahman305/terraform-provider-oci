@@ -74,6 +74,7 @@ import (
 	tf_integration "github.com/oracle/terraform-provider-oci/internal/service/integration"
 	tf_jms "github.com/oracle/terraform-provider-oci/internal/service/jms"
 	tf_jms_java_downloads "github.com/oracle/terraform-provider-oci/internal/service/jms_java_downloads"
+	tf_jms_utils "github.com/oracle/terraform-provider-oci/internal/service/jms_utils"
 	tf_kms "github.com/oracle/terraform-provider-oci/internal/service/kms"
 	tf_license_manager "github.com/oracle/terraform-provider-oci/internal/service/license_manager"
 	tf_limits "github.com/oracle/terraform-provider-oci/internal/service/limits"
@@ -347,6 +348,9 @@ func init() {
 	if common.CheckForEnabledServices("jmsjavadownloads") {
 		tf_jms_java_downloads.RegisterDatasource()
 	}
+	if common.CheckForEnabledServices("jmsutils") {
+		tf_jms_utils.RegisterDatasource()
+	}
 	if common.CheckForEnabledServices("kms") {
 		tf_kms.RegisterDatasource()
 	}
@@ -365,11 +369,11 @@ func init() {
 	if common.CheckForEnabledServices("logging") {
 		tf_logging.RegisterDatasource()
 	}
-	if common.CheckForEnabledServices("managedkafka") {
-		tf_managed_kafka.RegisterDatasource()
-	}
 	if common.CheckForEnabledServices("lustrefilestorage") {
 		tf_lustre_file_storage.RegisterDatasource()
+	}
+	if common.CheckForEnabledServices("managedkafka") {
+		tf_managed_kafka.RegisterDatasource()
 	}
 	if common.CheckForEnabledServices("managementagent") {
 		tf_management_agent.RegisterDatasource()

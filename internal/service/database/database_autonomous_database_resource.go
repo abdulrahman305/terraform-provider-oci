@@ -517,6 +517,10 @@ func DatabaseAutonomousDatabaseResource() *schema.Resource {
 						// Required
 
 						// Optional
+						"available_compute_capacity": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
 						"is_disabled": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -525,6 +529,10 @@ func DatabaseAutonomousDatabaseResource() *schema.Resource {
 						"pool_size": {
 							Type:     schema.TypeInt,
 							Optional: true,
+							Computed: true,
+						},
+						"total_compute_capacity": {
+							Type:     schema.TypeInt,
 							Computed: true,
 						},
 
@@ -2057,7 +2065,7 @@ func (s *DatabaseAutonomousDatabaseResourceCrud) Update() error {
 		request.DefinedTags = convertedDefinedTags
 	}
 
-	if displayName, ok := s.D.GetOkExists("display_name"); ok && s.D.HasChange("display_name") {
+	if displayName, ok := s.D.GetOkExists("display_name"); ok {
 		tmp := displayName.(string)
 		request.DisplayName = &tmp
 	}
@@ -2443,6 +2451,8 @@ func (s *DatabaseAutonomousDatabaseResourceCrud) SetData() error {
 	}
 
 	s.D.Set("clone_table_space_list", s.Res.CloneTableSpaceList)
+
+	s.D.Set("clone_type", s.Res.CloneType)
 
 	if s.Res.ClusterPlacementGroupId != nil {
 		s.D.Set("cluster_placement_group_id", *s.Res.ClusterPlacementGroupId)
@@ -2905,6 +2915,7 @@ func (s *DatabaseAutonomousDatabaseResourceCrud) SetData() error {
 	}
 	s.D.Set("whitelisted_ips", schema.NewSet(tfresource.LiteralTypeHashCodeForSets, whitelistedIps))
 
+	s.D.Set("clone_type", s.Res.CloneType)
 	return nil
 }
 
@@ -3424,12 +3435,20 @@ func (s *DatabaseAutonomousDatabaseResourceCrud) mapToResourcePoolSummary(fieldK
 func ResourcePoolSummaryToMap(obj *oci_database.ResourcePoolSummary) map[string]interface{} {
 	result := map[string]interface{}{}
 
+	if obj.AvailableComputeCapacity != nil {
+		result["available_compute_capacity"] = int(*obj.AvailableComputeCapacity)
+	}
+
 	if obj.IsDisabled != nil {
 		result["is_disabled"] = bool(*obj.IsDisabled)
 	}
 
 	if obj.PoolSize != nil {
 		result["pool_size"] = int(*obj.PoolSize)
+	}
+
+	if obj.TotalComputeCapacity != nil {
+		result["total_compute_capacity"] = int(*obj.TotalComputeCapacity)
 	}
 
 	return result
@@ -4119,6 +4138,9 @@ func (s *DatabaseAutonomousDatabaseResourceCrud) populateTopLevelPolymorphicCrea
 		request.CreateAutonomousDatabaseDetails = details
 	case strings.ToLower("CLONE_TO_REFRESHABLE"):
 		details := oci_database.CreateRefreshableAutonomousDatabaseCloneDetails{}
+		if cloneType, ok := s.D.GetOkExists("clone_type"); ok {
+			details.CloneType = oci_database.CreateRefreshableAutonomousDatabaseCloneDetailsCloneTypeEnum(cloneType.(string))
+		}
 		if refreshableMode, ok := s.D.GetOkExists("refreshable_mode"); ok {
 			details.RefreshableMode = oci_database.CreateRefreshableAutonomousDatabaseCloneDetailsRefreshableModeEnum(refreshableMode.(string))
 		}

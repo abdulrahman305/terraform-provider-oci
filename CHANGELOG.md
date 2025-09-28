@@ -1,3 +1,48 @@
+## 7.20.0 (September 23, 2025)
+
+### Added
+- Support for Java Management Service 10.0 - Standalone Plane Component (SDKs & TERSI ONLY)
+- Support for Java Management Service 10.0
+- Support for ExaDB-D Exascale Integration
+- Support for OCI Cache Discovery Endpoint for Sharded Clusters
+- Support for Marketplace Metadata for Attribution and Attestation
+- Support for Data Safe - Confidence Level support in Data Discovery
+
+
+## 7.19.0 (September 17, 2025)
+
+### Added
+- Support for BaseDB@Partner Clouds- DBAAS Support
+- Ensure that WR does not error out if there are no work request errors
+- Support for ADB-S: Refreshable Metadata Clones
+
+### Deprecation
+- Support for IPv6 for OCI FSS
+
+### Bug Fix
+- Fixing tunnel inspection and nat rules names for herds reset export resources failure.
+- display name causing update issue
+
+## 7.18.0 (September 10, 2025)
+
+### Added
+- Support for Support resource locking for Email Delivery
+- Support for OCI FSS IPv6 Support
+
+### Bug Fix
+- TERSI-7599: 08/11-NewDev - UDX fixes only to allow ENTERPRISE_EDITION_EXTREME_PERFORMANCE
+
+## 7.17.0 (September 4, 2025)
+
+### Added
+- Support for AutoScale-DB-Vault | ExaDB-XS
+- Support for Backup Validation (V2)- Terraform HeatWave Service: Backup Validation
+- Support for ADB-S: Provide Available Capacity When Joining an Elastic Pool
+- Support for Container Governance Service
+- Support for dbmulticloud GCP and azure fixes
+- Prod Endpoint for AI Vision Service Stream Video Processing
+- Support for AI Vision Service Stream Video Processing
+
 ## 7.16.0 (August 27, 2025)
 
 ### Added

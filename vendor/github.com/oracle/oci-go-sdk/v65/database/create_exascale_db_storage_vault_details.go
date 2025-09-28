@@ -50,11 +50,17 @@ type CreateExascaleDbStorageVaultDetails struct {
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Exadata infrastructure.
 	ExadataInfrastructureId *string `mandatory:"false" json:"exadataInfrastructureId"`
 
-	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the cluster placement group of the Exadata Infrastructure.
+	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the cluster placement group of the Exadata Infrastructure or Db System.
 	ClusterPlacementGroupId *string `mandatory:"false" json:"clusterPlacementGroupId"`
 
 	// The OCID (https://docs.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the subscription with which resource needs to be associated with.
 	SubscriptionId *string `mandatory:"false" json:"subscriptionId"`
+
+	// Indicates if autoscale feature is enabled for the Database Storage Vault. The default value is `FALSE`.
+	IsAutoscaleEnabled *bool `mandatory:"false" json:"isAutoscaleEnabled"`
+
+	// Maximum limit storage size in gigabytes, that is applicable for the Database Storage Vault.
+	AutoscaleLimitInGBs *int `mandatory:"false" json:"autoscaleLimitInGBs"`
 }
 
 func (m CreateExascaleDbStorageVaultDetails) String() string {
