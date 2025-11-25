@@ -64,15 +64,17 @@ The following attributes are exported:
 * `database_size_in_gbs` - The size of the database in gigabytes at the time the backup was taken.
 * `display_name` - The user-friendly name for the backup. The name does not have to be unique.
 * `encryption_key_location_details` - Types of providers supported for managing database encryption keys
+	* `aws_encryption_key_id` - Provide the key OCID of a registered AWS key.
 	* `azure_encryption_key_id` - Provide the key OCID of a registered Azure key.
+    * `google_cloud_provider_encryption_key_id` - Provide the key OCID of a registered GCP key.
 	* `hsm_password` - Provide the HSM password as you would in RDBMS for External HSM.
-	* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. 
+	* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. Use 'AWS' for creating a new database or migrating a database key to Aws. Use 'GCP' for creating a new database or migrating a database key to Gcp.
 * `id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the backup.
 * `is_using_oracle_managed_keys` - True if Oracle Managed Keys is required for restore of the backup.
 * `key_store_id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key store of Oracle Vault.
 * `key_store_wallet_name` - The wallet name for Oracle Key Vault.
 * `kms_key_id` - The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
-* `kms_key_version_id` - The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous Database Serverless does not use key versions, hence is not applicable for Autonomous Database Serverless instances.
+* `kms_key_version_id` - The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous AI Database Serverless does not use key versions, hence is not applicable for Autonomous AI Database Serverless instances.
 * `lifecycle_details` - Additional information about the current lifecycle state.
 * `retention_period_in_days` - The retention period of the long term backup in days.
 * `retention_period_in_years` - The retention period of the long term backup in years.

@@ -54,6 +54,7 @@ import (
 	tf_demand_signal "github.com/oracle/terraform-provider-oci/internal/service/demand_signal"
 	tf_desktops "github.com/oracle/terraform-provider-oci/internal/service/desktops"
 	tf_devops "github.com/oracle/terraform-provider-oci/internal/service/devops"
+	tf_dif "github.com/oracle/terraform-provider-oci/internal/service/dif"
 	tf_disaster_recovery "github.com/oracle/terraform-provider-oci/internal/service/disaster_recovery"
 	tf_dns "github.com/oracle/terraform-provider-oci/internal/service/dns"
 	tf_email "github.com/oracle/terraform-provider-oci/internal/service/email"
@@ -113,6 +114,7 @@ import (
 	tf_osub_organization_subscription "github.com/oracle/terraform-provider-oci/internal/service/osub_organization_subscription"
 	tf_osub_subscription "github.com/oracle/terraform-provider-oci/internal/service/osub_subscription"
 	tf_osub_usage "github.com/oracle/terraform-provider-oci/internal/service/osub_usage"
+	tf_psa "github.com/oracle/terraform-provider-oci/internal/service/psa"
 	tf_psql "github.com/oracle/terraform-provider-oci/internal/service/psql"
 	tf_queue "github.com/oracle/terraform-provider-oci/internal/service/queue"
 	tf_recovery "github.com/oracle/terraform-provider-oci/internal/service/recovery"
@@ -292,6 +294,9 @@ func init() {
 	if common.CheckForEnabledServices("devops") {
 		tf_devops.RegisterDatasource()
 	}
+	if common.CheckForEnabledServices("dif") {
+		tf_dif.RegisterDatasource()
+	}
 	if common.CheckForEnabledServices("disasterrecovery") {
 		tf_disaster_recovery.RegisterDatasource()
 	}
@@ -468,6 +473,9 @@ func init() {
 	}
 	if common.CheckForEnabledServices("osubusage") {
 		tf_osub_usage.RegisterDatasource()
+	}
+	if common.CheckForEnabledServices("psa") {
+		tf_psa.RegisterDatasource()
 	}
 	if common.CheckForEnabledServices("psql") {
 		tf_psql.RegisterDatasource()

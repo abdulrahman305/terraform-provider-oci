@@ -120,6 +120,7 @@ Make sure the `output_path` is empty before running resource discovery
 * `output_path` - Absolute path to output generated configurations and state files of the exported compartment
 * `parallelism` - The number of threads to use for resource discovery. By default the value is 1
 * `retry_timeout` - The time duration for which API calls will wait and retry operation in case of API errors. By default, the retry timeout duration is 15s
+* `custom_api_timeout` - Specifies the maximum duration an API call will wait for a response before timing out. The default value is 60 seconds.
 * `services` - Comma-separated list of service resources to export. If not specified, all resources within the given compartment (which excludes identity resources) are exported. The following values can be specified:
     * `adm` - Discovers adm resources within the specified compartment
     * `ai_data_platform` - Discovers ai_data_platform resources within the specified compartment
@@ -166,6 +167,7 @@ Make sure the `output_path` is empty before running resource discovery
     * `demand_signal` - Discovers demand_signal resources within the specified compartment
     * `desktops` - Discovers desktop pool resources within the specified compartment
     * `devops` - Discovers devops resources within the specified compartment
+    * `dif` - Discovers dif resources within the specified compartment
     * `disaster_recovery` - Discovers disaster_recovery resources within the specified compartment
     * `dns` - Discovers dns resources (except record) within the specified compartment
     * `email` - Discovers email_sender resources within the specified compartment
@@ -216,6 +218,7 @@ Make sure the `output_path` is empty before running resource discovery
     * `optimizer` - Discovers optimizer resources within the specified compartment
     * `os_management_hub` - Discovers os_management_hub resources within the specified compartment
     * `osp_gateway` - Discovers osp_gateway resources within the specified compartment
+    * `psa` - Discovers psa resources within the specified compartment
     * `psql` - Discovers psql resources within the specified compartment
     * `queue` - Discovers queue resources within the specified compartment
     * `recovery` - Discovers recovery resources within the specified compartment
@@ -690,6 +693,7 @@ database_tools
     
 * oci\_database\_tools\_database\_tools\_private\_endpoint
 * oci\_database\_tools\_database\_tools\_connection
+* oci\_database\_tools\_database\_tools\_identity
 
 datacatalog
     
@@ -754,6 +758,8 @@ dbmulticloud
 * oci\_dbmulticloud\_oracle\_db\_azure\_vault
 * oci\_dbmulticloud\_oracle\_db\_gcp\_identity\_connector
 * oci\_dbmulticloud\_oracle\_db\_gcp\_key\_ring
+* oci\_dbmulticloud\_oracle\_db\_aws\_identity\_connector
+* oci\_dbmulticloud\_oracle\_db\_aws\_key
 
 delegate_access_control
     
@@ -786,6 +792,10 @@ devops
 * oci\_devops\_repository\_mirror
 * oci\_devops\_repository\_setting
 * oci\_devops\_project\_repository\_setting
+
+dif
+    
+* oci\_dif\_stack
 
 disaster_recovery
     
@@ -992,7 +1002,6 @@ jms
 * oci\_jms\_task\_schedule
 * oci\_jms\_fleet\_agent\_configuration
 
-
 jms_utils
     
 * oci\_jms\_utils\_subscription\_acknowledgment\_configuration
@@ -1056,6 +1065,7 @@ logging
 lustre_file_storage
     
 * oci\_lustre\_file\_storage\_lustre\_file\_system
+* oci\_lustre\_file\_storage\_object\_storage\_link
 
 managed_kafka
     
@@ -1254,6 +1264,10 @@ osp_gateway
     
 * oci\_osp\_gateway\_subscription
 * oci\_osp\_gateway\_address\_action\_verification
+
+psa
+    
+* oci\_psa\_private\_service\_acces
 
 psql
     

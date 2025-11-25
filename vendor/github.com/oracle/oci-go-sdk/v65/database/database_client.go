@@ -153,6 +153,68 @@ func (client DatabaseClient) activateExadataInfrastructure(ctx context.Context, 
 	return response, err
 }
 
+// AddDbnodeSnapshotsForExadbVmCluster Add a database node snapshots to the Exadb VM cluster..
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/AddDbnodeSnapshotsForExadbVmCluster.go.html to see an example of how to use AddDbnodeSnapshotsForExadbVmCluster API.
+func (client DatabaseClient) AddDbnodeSnapshotsForExadbVmCluster(ctx context.Context, request AddDbnodeSnapshotsForExadbVmClusterRequest) (response AddDbnodeSnapshotsForExadbVmClusterResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.addDbnodeSnapshotsForExadbVmCluster, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = AddDbnodeSnapshotsForExadbVmClusterResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = AddDbnodeSnapshotsForExadbVmClusterResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(AddDbnodeSnapshotsForExadbVmClusterResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into AddDbnodeSnapshotsForExadbVmClusterResponse")
+	}
+	return
+}
+
+// addDbnodeSnapshotsForExadbVmCluster implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) addDbnodeSnapshotsForExadbVmCluster(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/exadbVmClusters/{exadbVmClusterId}/actions/addDbNodeSnapshots", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response AddDbnodeSnapshotsForExadbVmClusterResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/ExadbVmCluster/AddDbnodeSnapshotsForExadbVmCluster"
+		err = common.PostProcessServiceError(err, "Database", "AddDbnodeSnapshotsForExadbVmCluster", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // AddStandbyAutonomousContainerDatabase Add a standby Autonomous Container Database. For more information about Autonomous Data Guard,see
 // Protect Critical Databases from Failures and Disasters Using Autonomous Data Guard (https://docs.oracle.com/en/cloud/paas/autonomous-database/dedicated/adbau/GUID-C57B9A6E-7471-4CDC-8F10-B8386538E31C).
 //
@@ -216,7 +278,7 @@ func (client DatabaseClient) addStandbyAutonomousContainerDatabase(ctx context.C
 	return response, err
 }
 
-// AddStorageCapacityCloudExadataInfrastructure Makes the storage capacity from additional storage servers available for Cloud VM Cluster consumption. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.
+// AddStorageCapacityCloudExadataInfrastructure Makes the storage capacity from additional storage servers available for Cloud VM Cluster consumption. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.
 //
 // # See also
 //
@@ -464,7 +526,7 @@ func (client DatabaseClient) addVirtualMachineToVmCluster(ctx context.Context, r
 	return response, err
 }
 
-// AutonomousDatabaseManualRefresh Initiates a data refresh for an Autonomous Database refreshable clone. Data is refreshed from the source database to the point of a specified timestamp.
+// AutonomousDatabaseManualRefresh Initiates a data refresh for an Autonomous AI Database refreshable clone. Data is refreshed from the source database to the point of a specified timestamp.
 //
 // # See also
 //
@@ -776,8 +838,8 @@ func (client DatabaseClient) changeAutonomousContainerDatabaseCompartment(ctx co
 	return response, err
 }
 
-// ChangeAutonomousDatabaseCompartment Move the Autonomous Database and its dependent resources to the specified compartment.
-// For more information about moving Autonomous Databases, see
+// ChangeAutonomousDatabaseCompartment Move the Autonomous AI Database and its dependent resources to the specified compartment.
+// For more information about moving Autonomous AI Databases, see
 // Moving Database Resources to a Different Compartment (https://docs.oracle.com/iaas/Content/Database/Concepts/databaseoverview.htm#moveRes).
 //
 // # See also
@@ -840,7 +902,7 @@ func (client DatabaseClient) changeAutonomousDatabaseCompartment(ctx context.Con
 	return response, err
 }
 
-// ChangeAutonomousDatabaseSoftwareImageCompartment Move the Autonomous Database Software Image and its dependent resources to the specified compartment.
+// ChangeAutonomousDatabaseSoftwareImageCompartment Move the Autonomous AI Database Software Image and its dependent resources to the specified compartment.
 //
 // # See also
 //
@@ -902,7 +964,7 @@ func (client DatabaseClient) changeAutonomousDatabaseSoftwareImageCompartment(ct
 	return response, err
 }
 
-// ChangeAutonomousDatabaseSubscription Associate an Autonomous Database with a different subscription.
+// ChangeAutonomousDatabaseSubscription Associate an Autonomous AI Database with a different subscription.
 //
 // # See also
 //
@@ -1340,7 +1402,7 @@ func (client DatabaseClient) changeCloudDbSystemSubscription(ctx context.Context
 	return response, err
 }
 
-// ChangeCloudExadataInfrastructureCompartment Moves a cloud Exadata infrastructure resource and its dependent resources to another compartment. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.For more information about moving resources to a different compartment, see Moving Database Resources to a Different Compartment (https://docs.oracle.com/iaas/Content/Database/Concepts/databaseoverview.htm#moveRes).
+// ChangeCloudExadataInfrastructureCompartment Moves a cloud Exadata infrastructure resource and its dependent resources to another compartment. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.For more information about moving resources to a different compartment, see Moving Database Resources to a Different Compartment (https://docs.oracle.com/iaas/Content/Database/Concepts/databaseoverview.htm#moveRes).
 //
 // # See also
 //
@@ -1780,7 +1842,7 @@ func (client DatabaseClient) changeDbSystemCompartment(ctx context.Context, requ
 	return response, err
 }
 
-// ChangeDisasterRecoveryConfiguration This operation updates the cross-region disaster recovery (DR) details of the standby Autonomous Database Serverless database, and must be run on the standby side.
+// ChangeDisasterRecoveryConfiguration This operation updates the cross-region disaster recovery (DR) details of the standby Autonomous AI Database Serverless database, and must be run on the standby side.
 //
 // # See also
 //
@@ -2905,7 +2967,7 @@ func (client DatabaseClient) completeExternalBackupJob(ctx context.Context, requ
 	return response, err
 }
 
-// ConfigureAutonomousDatabaseVaultKey Configures the Autonomous Database Vault service key (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
+// ConfigureAutonomousDatabaseVaultKey Configures the Autonomous AI Database Vault service key (https://docs.oracle.com/iaas/Content/KeyManagement/Concepts/keyoverview.htm#concepts).
 //
 // # See also
 //
@@ -3091,7 +3153,7 @@ func (client DatabaseClient) configureExascaleExadataInfrastructure(ctx context.
 	return response, err
 }
 
-// ConfigureSaasAdminUser This operation updates SaaS administrative user configuration of the Autonomous Database.
+// ConfigureSaasAdminUser This operation updates SaaS administrative user configuration of the Autonomous AI Database.
 //
 // # See also
 //
@@ -3709,7 +3771,7 @@ func (client DatabaseClient) createAutonomousContainerDatabaseDataguardAssociati
 	return response, err
 }
 
-// CreateAutonomousDatabase Creates a new Autonomous Database.
+// CreateAutonomousDatabase Creates a new Autonomous AI Database.
 //
 // # See also
 //
@@ -3771,7 +3833,7 @@ func (client DatabaseClient) createAutonomousDatabase(ctx context.Context, reque
 	return response, err
 }
 
-// CreateAutonomousDatabaseBackup Creates a new Autonomous Database backup for the specified database based on the provided request parameters.
+// CreateAutonomousDatabaseBackup Creates a new Autonomous AI Database backup for the specified database based on the provided request parameters.
 //
 // # See also
 //
@@ -3833,7 +3895,7 @@ func (client DatabaseClient) createAutonomousDatabaseBackup(ctx context.Context,
 	return response, err
 }
 
-// CreateAutonomousDatabaseSoftwareImage create Autonomous Database Software Image in the specified compartment.
+// CreateAutonomousDatabaseSoftwareImage create Autonomous AI Database Software Image in the specified compartment.
 //
 // # See also
 //
@@ -4143,7 +4205,7 @@ func (client DatabaseClient) createCloudAutonomousVmCluster(ctx context.Context,
 	return response, err
 }
 
-// CreateCloudExadataInfrastructure Creates a cloud Exadata infrastructure resource. This resource is used to create either an Exadata Cloud Service (https://docs.oracle.com/iaas/Content/Database/Concepts/exaoverview.htm) instance or an Autonomous Database on dedicated Exadata infrastructure.
+// CreateCloudExadataInfrastructure Creates a cloud Exadata infrastructure resource. This resource is used to create either an Exadata Cloud Service (https://docs.oracle.com/iaas/Content/Database/Concepts/exaoverview.htm) instance or an Autonomous AI Database on dedicated Exadata infrastructure.
 //
 // # See also
 //
@@ -6088,7 +6150,7 @@ func (client DatabaseClient) deleteApplicationVip(ctx context.Context, request c
 	return response, err
 }
 
-// DeleteAutonomousDatabase Deletes the specified Autonomous Database.
+// DeleteAutonomousDatabase Deletes the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -6202,7 +6264,7 @@ func (client DatabaseClient) deleteAutonomousDatabaseBackup(ctx context.Context,
 	return response, err
 }
 
-// DeleteAutonomousDatabaseSoftwareImage Delete an Autonomous Database Software Image
+// DeleteAutonomousDatabaseSoftwareImage Delete an Autonomous AI Database Software Image
 //
 // # See also
 //
@@ -6487,7 +6549,7 @@ func (client DatabaseClient) deleteCloudAutonomousVmCluster(ctx context.Context,
 	return response, err
 }
 
-// DeleteCloudExadataInfrastructure Deletes the cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.
+// DeleteCloudExadataInfrastructure Deletes the cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.
 //
 // # See also
 //
@@ -6881,6 +6943,63 @@ func (client DatabaseClient) deleteDbHome(ctx context.Context, request common.OC
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbHome/DeleteDbHome"
 		err = common.PostProcessServiceError(err, "Database", "DeleteDbHome", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// DeleteDbnodeSnapshot Deletes the specified Exadata Database Node Snapshot.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/DeleteDbnodeSnapshot.go.html to see an example of how to use DeleteDbnodeSnapshot API.
+func (client DatabaseClient) DeleteDbnodeSnapshot(ctx context.Context, request DeleteDbnodeSnapshotRequest) (response DeleteDbnodeSnapshotResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.deleteDbnodeSnapshot, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = DeleteDbnodeSnapshotResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = DeleteDbnodeSnapshotResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(DeleteDbnodeSnapshotResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into DeleteDbnodeSnapshotResponse")
+	}
+	return
+}
+
+// deleteDbnodeSnapshot implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) deleteDbnodeSnapshot(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodDelete, "/dbnodeSnapshots/{dbnodeSnapshotId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response DeleteDbnodeSnapshotResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/DeleteDbnodeSnapshot"
+		err = common.PostProcessServiceError(err, "Database", "DeleteDbnodeSnapshot", apiReferenceLink)
 		return response, err
 	}
 
@@ -7977,7 +8096,7 @@ func (client DatabaseClient) deleteVmClusterNetwork(ctx context.Context, request
 	return response, err
 }
 
-// DeregisterAutonomousDatabaseDataSafe Asynchronously deregisters this Autonomous Database with Data Safe.
+// DeregisterAutonomousDatabaseDataSafe Asynchronously deregisters this Autonomous AI Database with Data Safe.
 //
 // # See also
 //
@@ -8034,7 +8153,7 @@ func (client DatabaseClient) deregisterAutonomousDatabaseDataSafe(ctx context.Co
 	return response, err
 }
 
-// DisableAutonomousDatabaseManagement Disables Database Management for the Autonomous Database resource.
+// DisableAutonomousDatabaseManagement Disables Database Management for the Autonomous AI Database resource.
 //
 // # See also
 //
@@ -8091,7 +8210,7 @@ func (client DatabaseClient) disableAutonomousDatabaseManagement(ctx context.Con
 	return response, err
 }
 
-// DisableAutonomousDatabaseOperationsInsights Disables Operations Insights for the Autonomous Database resource.
+// DisableAutonomousDatabaseOperationsInsights Disables Operations Insights for the Autonomous AI Database resource.
 //
 // # See also
 //
@@ -9080,7 +9199,7 @@ func (client DatabaseClient) editAutonomousContainerDatabaseDataguard(ctx contex
 	return response, err
 }
 
-// EnableAutonomousDatabaseManagement Enables Database Management for Autonomous Database.
+// EnableAutonomousDatabaseManagement Enables Database Management for Autonomous AI Database.
 //
 // # See also
 //
@@ -9137,7 +9256,7 @@ func (client DatabaseClient) enableAutonomousDatabaseManagement(ctx context.Cont
 	return response, err
 }
 
-// EnableAutonomousDatabaseOperationsInsights Enables the specified Autonomous Database with Operations Insights.
+// EnableAutonomousDatabaseOperationsInsights Enables the specified Autonomous AI Database with Operations Insights.
 //
 // # See also
 //
@@ -9820,7 +9939,7 @@ func (client DatabaseClient) enablePluggableDatabaseManagement(ctx context.Conte
 	return response, err
 }
 
-// FailOverAutonomousDatabase Initiates a failover of the specified Autonomous Database to the associated peer database. Applicable only to databases with Disaster Recovery enabled.
+// FailOverAutonomousDatabase Initiates a failover of the specified Autonomous AI Database to the associated peer database. Applicable only to databases with Disaster Recovery enabled.
 // This API should be called in the remote region where the peer database resides.
 // Below parameter is optional:
 //   - `peerDbId`
@@ -10129,7 +10248,7 @@ func (client DatabaseClient) failoverDataGuardAssociation(ctx context.Context, r
 	return response, err
 }
 
-// GenerateAutonomousDatabaseWallet Creates and downloads a wallet for the specified Autonomous Database.
+// GenerateAutonomousDatabaseWallet Creates and downloads a wallet for the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -10480,7 +10599,7 @@ func (client DatabaseClient) getAutonomousContainerDatabaseResourceUsage(ctx con
 	return response, err
 }
 
-// GetAutonomousDatabase Gets the details of the specified Autonomous Database.
+// GetAutonomousDatabase Gets the details of the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -10537,7 +10656,7 @@ func (client DatabaseClient) getAutonomousDatabase(ctx context.Context, request 
 	return response, err
 }
 
-// GetAutonomousDatabaseBackup Gets information about the specified Autonomous Database backup.
+// GetAutonomousDatabaseBackup Gets information about the specified Autonomous AI Database backup.
 //
 // # See also
 //
@@ -10594,7 +10713,7 @@ func (client DatabaseClient) getAutonomousDatabaseBackup(ctx context.Context, re
 	return response, err
 }
 
-// GetAutonomousDatabaseDataguardAssociation *Deprecated.* Use the GetAutonomousContainerDatabase operation to gets an Autonomous Data Guard-enabled database associated with the specified Autonomous Database.
+// GetAutonomousDatabaseDataguardAssociation *Deprecated.* Use the GetAutonomousContainerDatabase operation to gets an Autonomous Data Guard-enabled database associated with the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -10651,7 +10770,7 @@ func (client DatabaseClient) getAutonomousDatabaseDataguardAssociation(ctx conte
 	return response, err
 }
 
-// GetAutonomousDatabaseRegionalWallet Gets the Autonomous Database regional wallet details.
+// GetAutonomousDatabaseRegionalWallet Gets the Autonomous AI Database regional wallet details.
 //
 // # See also
 //
@@ -10708,7 +10827,7 @@ func (client DatabaseClient) getAutonomousDatabaseRegionalWallet(ctx context.Con
 	return response, err
 }
 
-// GetAutonomousDatabaseSoftwareImage Gets information about the specified Autonomous Database Software Image.
+// GetAutonomousDatabaseSoftwareImage Gets information about the specified Autonomous AI Database Software Image.
 //
 // # See also
 //
@@ -10765,7 +10884,7 @@ func (client DatabaseClient) getAutonomousDatabaseSoftwareImage(ctx context.Cont
 	return response, err
 }
 
-// GetAutonomousDatabaseWallet Gets the wallet details for the specified Autonomous Database.
+// GetAutonomousDatabaseWallet Gets the wallet details for the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -11335,7 +11454,7 @@ func (client DatabaseClient) getCloudAutonomousVmClusterResourceUsage(ctx contex
 	return response, err
 }
 
-// GetCloudExadataInfrastructure Gets information about the specified cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.
+// GetCloudExadataInfrastructure Gets information about the specified cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.
 //
 // # See also
 //
@@ -12584,6 +12703,63 @@ func (client DatabaseClient) getDbSystemUpgradeHistoryEntry(ctx context.Context,
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbSystemUpgradeHistoryEntry/GetDbSystemUpgradeHistoryEntry"
 		err = common.PostProcessServiceError(err, "Database", "GetDbSystemUpgradeHistoryEntry", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// GetDbnodeSnapshot Gets information about the specified Exadata Database Node Snapshot in the specified compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/GetDbnodeSnapshot.go.html to see an example of how to use GetDbnodeSnapshot API.
+func (client DatabaseClient) GetDbnodeSnapshot(ctx context.Context, request GetDbnodeSnapshotRequest) (response GetDbnodeSnapshotResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.getDbnodeSnapshot, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = GetDbnodeSnapshotResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = GetDbnodeSnapshotResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(GetDbnodeSnapshotResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into GetDbnodeSnapshotResponse")
+	}
+	return
+}
+
+// getDbnodeSnapshot implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) getDbnodeSnapshot(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/dbnodeSnapshots/{dbnodeSnapshotId}", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetDbnodeSnapshotResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/GetDbnodeSnapshot"
+		err = common.PostProcessServiceError(err, "Database", "GetDbnodeSnapshot", apiReferenceLink)
 		return response, err
 	}
 
@@ -14482,7 +14658,7 @@ func (client DatabaseClient) getVmClusterUpdateHistoryEntry(ctx context.Context,
 	return response, err
 }
 
-// LaunchAutonomousExadataInfrastructure **Deprecated** To create a new Autonomous Database system on dedicated Exadata Infrastructure, use the CreateCloudExadataInfrastructure and CreateCloudAutonomousVmCluster operations instead. Note that to create an Autonomous VM cluster, you must have an existing Exadata Infrastructure resource to contain the VM cluster.
+// LaunchAutonomousExadataInfrastructure **Deprecated** To create a new Autonomous AI Database system on dedicated Exadata Infrastructure, use the CreateCloudExadataInfrastructure and CreateCloudAutonomousVmCluster operations instead. Note that to create an Autonomous VM cluster, you must have an existing Exadata Infrastructure resource to contain the VM cluster.
 //
 // # See also
 //
@@ -14897,7 +15073,7 @@ func (client DatabaseClient) listAutonomousContainerDatabases(ctx context.Contex
 	return response, err
 }
 
-// ListAutonomousDatabaseBackups Gets a list of Autonomous Database backups based on either the `autonomousDatabaseId` or `compartmentId` specified as a query parameter.
+// ListAutonomousDatabaseBackups Gets a list of Autonomous AI Database backups based on either the `autonomousDatabaseId` or `compartmentId` specified as a query parameter.
 //
 // # See also
 //
@@ -15011,7 +15187,7 @@ func (client DatabaseClient) listAutonomousDatabaseCharacterSets(ctx context.Con
 	return response, err
 }
 
-// ListAutonomousDatabaseClones Lists the Autonomous Database clones for the specified Autonomous Database.
+// ListAutonomousDatabaseClones Lists the Autonomous AI Database clones for the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -15068,7 +15244,7 @@ func (client DatabaseClient) listAutonomousDatabaseClones(ctx context.Context, r
 	return response, err
 }
 
-// ListAutonomousDatabaseDataguardAssociations *Deprecated.* Use the GetAutonomousContainerDatabase operation to get a list of the Autonomous Data Guard-enabled databases associated with the specified Autonomous Database.
+// ListAutonomousDatabaseDataguardAssociations *Deprecated.* Use the GetAutonomousContainerDatabase operation to get a list of the Autonomous Data Guard-enabled databases associated with the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -15125,7 +15301,7 @@ func (client DatabaseClient) listAutonomousDatabaseDataguardAssociations(ctx con
 	return response, err
 }
 
-// ListAutonomousDatabasePeers Lists the Autonomous Database peers for the specified Autonomous Database.
+// ListAutonomousDatabasePeers Lists the Autonomous AI Database peers for the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -15182,7 +15358,7 @@ func (client DatabaseClient) listAutonomousDatabasePeers(ctx context.Context, re
 	return response, err
 }
 
-// ListAutonomousDatabaseRefreshableClones Lists the OCIDs of the Autonomous Database local and connected remote refreshable clones with the region where they exist for the specified source database.
+// ListAutonomousDatabaseRefreshableClones Lists the OCIDs of the Autonomous AI Database local and connected remote refreshable clones with the region where they exist for the specified source database.
 //
 // # See also
 //
@@ -15239,7 +15415,7 @@ func (client DatabaseClient) listAutonomousDatabaseRefreshableClones(ctx context
 	return response, err
 }
 
-// ListAutonomousDatabaseSoftwareImages Gets a list of the Autonomous Database Software Images in the specified compartment.
+// ListAutonomousDatabaseSoftwareImages Gets a list of the Autonomous AI Database Software Images in the specified compartment.
 //
 // # See also
 //
@@ -15296,7 +15472,7 @@ func (client DatabaseClient) listAutonomousDatabaseSoftwareImages(ctx context.Co
 	return response, err
 }
 
-// ListAutonomousDatabases Gets a list of Autonomous Databases based on the query parameters specified.
+// ListAutonomousDatabases Gets a list of Autonomous AI Databases based on the query parameters specified.
 //
 // # See also
 //
@@ -15353,8 +15529,8 @@ func (client DatabaseClient) listAutonomousDatabases(ctx context.Context, reques
 	return response, err
 }
 
-// ListAutonomousDbPreviewVersions Gets a list of supported Autonomous Database versions. Note that preview version software is only available for
-// Autonomous Database Serverless (https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html) databases.
+// ListAutonomousDbPreviewVersions Gets a list of supported Autonomous AI Database versions. Note that preview version software is only available for
+// Autonomous AI Database Serverless (https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html) databases.
 //
 // # See also
 //
@@ -15411,7 +15587,7 @@ func (client DatabaseClient) listAutonomousDbPreviewVersions(ctx context.Context
 	return response, err
 }
 
-// ListAutonomousDbVersions Gets a list of supported Autonomous Database versions.
+// ListAutonomousDbVersions Gets a list of supported Autonomous AI Database versions.
 //
 // # See also
 //
@@ -15982,7 +16158,7 @@ func (client DatabaseClient) listCloudAutonomousVmClusters(ctx context.Context, 
 	return response, err
 }
 
-// ListCloudExadataInfrastructures Gets a list of the cloud Exadata infrastructure resources in the specified compartment. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.
+// ListCloudExadataInfrastructures Gets a list of the cloud Exadata infrastructure resources in the specified compartment. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.
 //
 // # See also
 //
@@ -17409,6 +17585,63 @@ func (client DatabaseClient) listDbVersions(ctx context.Context, request common.
 	return response, err
 }
 
+// ListDbnodeSnapshots Gets a list of the Exadata Database Node Snapshots in the specified compartment.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/ListDbnodeSnapshots.go.html to see an example of how to use ListDbnodeSnapshots API.
+func (client DatabaseClient) ListDbnodeSnapshots(ctx context.Context, request ListDbnodeSnapshotsRequest) (response ListDbnodeSnapshotsResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+	ociResponse, err = common.Retry(ctx, request, client.listDbnodeSnapshots, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = ListDbnodeSnapshotsResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = ListDbnodeSnapshotsResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(ListDbnodeSnapshotsResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into ListDbnodeSnapshotsResponse")
+	}
+	return
+}
+
+// listDbnodeSnapshots implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) listDbnodeSnapshots(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodGet, "/dbnodeSnapshots", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response ListDbnodeSnapshotsResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/ListDbnodeSnapshots"
+		err = common.PostProcessServiceError(err, "Database", "ListDbnodeSnapshots", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // ListExadataInfrastructures Lists the Exadata infrastructure resources in the specified compartment. Applies to Exadata Cloud@Customer instances only.
 // To list the Exadata Cloud Service infrastructure resources in a compartment, use the  ListCloudExadataInfrastructures operation.
 //
@@ -18738,7 +18971,7 @@ func (client DatabaseClient) listRecommendedScheduledActions(ctx context.Context
 	return response, err
 }
 
-// ListResourcePoolMembers Lists the OCIDs of the Autonomous Database resource pool members for the specified Autonomous Database leader.
+// ListResourcePoolMembers Lists the OCIDs of the Autonomous AI Database resource pool members for the specified Autonomous AI Database leader.
 //
 // # See also
 //
@@ -19912,6 +20145,68 @@ func (client DatabaseClient) modifyPluggableDatabaseManagement(ctx context.Conte
 	return response, err
 }
 
+// MountDbnodeSnapshot Mounts the snapshot for the provided dbNode.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/MountDbnodeSnapshot.go.html to see an example of how to use MountDbnodeSnapshot API.
+func (client DatabaseClient) MountDbnodeSnapshot(ctx context.Context, request MountDbnodeSnapshotRequest) (response MountDbnodeSnapshotResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.mountDbnodeSnapshot, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = MountDbnodeSnapshotResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = MountDbnodeSnapshotResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(MountDbnodeSnapshotResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into MountDbnodeSnapshotResponse")
+	}
+	return
+}
+
+// mountDbnodeSnapshot implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) mountDbnodeSnapshot(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/dbnodeSnapshots/{dbnodeSnapshotId}/actions/mount", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response MountDbnodeSnapshotResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/MountDbnodeSnapshot"
+		err = common.PostProcessServiceError(err, "Database", "MountDbnodeSnapshot", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // MoveExecutionActionMember Moves an execution action member to this execution action resource from another.
 //
 // # See also
@@ -19967,6 +20262,68 @@ func (client DatabaseClient) moveExecutionActionMember(ctx context.Context, requ
 	if err != nil {
 		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/ExecutionAction/MoveExecutionActionMember"
 		err = common.PostProcessServiceError(err, "Database", "MoveExecutionActionMember", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
+// RefreshDataGuardHealthStatus Refreshes the Data Guard health status for the specified database. This operation is supported on both primary and standby databases.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/RefreshDataGuardHealthStatus.go.html to see an example of how to use RefreshDataGuardHealthStatus API.
+func (client DatabaseClient) RefreshDataGuardHealthStatus(ctx context.Context, request RefreshDataGuardHealthStatusRequest) (response RefreshDataGuardHealthStatusResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.refreshDataGuardHealthStatus, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = RefreshDataGuardHealthStatusResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = RefreshDataGuardHealthStatusResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(RefreshDataGuardHealthStatusResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into RefreshDataGuardHealthStatusResponse")
+	}
+	return
+}
+
+// refreshDataGuardHealthStatus implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) refreshDataGuardHealthStatus(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/databases/{databaseId}/dataGuard/actions/refresh", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response RefreshDataGuardHealthStatusResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/Database/RefreshDataGuardHealthStatus"
+		err = common.PostProcessServiceError(err, "Database", "RefreshDataGuardHealthStatus", apiReferenceLink)
 		return response, err
 	}
 
@@ -20036,7 +20393,7 @@ func (client DatabaseClient) refreshPluggableDatabase(ctx context.Context, reque
 	return response, err
 }
 
-// RegisterAutonomousDatabaseDataSafe Asynchronously registers this Autonomous Database with Data Safe.
+// RegisterAutonomousDatabaseDataSafe Asynchronously registers this Autonomous AI Database with Data Safe.
 //
 // # See also
 //
@@ -20946,7 +21303,7 @@ func (client DatabaseClient) restartAutonomousContainerDatabase(ctx context.Cont
 	return response, err
 }
 
-// RestartAutonomousDatabase Restarts the specified Autonomous Database.
+// RestartAutonomousDatabase Restarts the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -21003,7 +21360,7 @@ func (client DatabaseClient) restartAutonomousDatabase(ctx context.Context, requ
 	return response, err
 }
 
-// RestoreAutonomousDatabase Restores an Autonomous Database based on the provided request parameters.
+// RestoreAutonomousDatabase Restores an Autonomous AI Database based on the provided request parameters.
 //
 // # See also
 //
@@ -21737,7 +22094,7 @@ func (client DatabaseClient) rotateVaultKey(ctx context.Context, request common.
 	return response, err
 }
 
-// SaasAdminUserStatus This operation gets SaaS administrative user status of the Autonomous Database.
+// SaasAdminUserStatus This operation gets SaaS administrative user status of the Autonomous AI Database.
 //
 // # See also
 //
@@ -22038,7 +22395,7 @@ func (client DatabaseClient) shrinkAutonomousDatabase(ctx context.Context, reque
 	return response, err
 }
 
-// StartAutonomousDatabase Starts the specified Autonomous Database.
+// StartAutonomousDatabase Starts the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -22157,7 +22514,7 @@ func (client DatabaseClient) startPluggableDatabase(ctx context.Context, request
 	return response, err
 }
 
-// StopAutonomousDatabase Stops the specified Autonomous Database.
+// StopAutonomousDatabase Stops the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -22457,7 +22814,7 @@ func (client DatabaseClient) switchoverAutonomousContainerDatabaseDataguardAssoc
 	return response, err
 }
 
-// SwitchoverAutonomousDatabase Initiates a switchover of the specified Autonomous Database to the associated peer database. Applicable only to databases with Disaster Recovery enabled.
+// SwitchoverAutonomousDatabase Initiates a switchover of the specified Autonomous AI Database to the associated peer database. Applicable only to databases with Disaster Recovery enabled.
 // This API should be called in the remote region where the peer database resides.
 // Below parameter is optional:
 //   - `peerDbId`
@@ -22756,6 +23113,68 @@ func (client DatabaseClient) terminateDbSystem(ctx context.Context, request comm
 	return response, err
 }
 
+// UnmountDbnodeSnapshot Unmounts the snapshot for the provided dbNode.
+//
+// # See also
+//
+// Click https://docs.oracle.com/en-us/iaas/tools/go-sdk-examples/latest/database/UnmountDbnodeSnapshot.go.html to see an example of how to use UnmountDbnodeSnapshot API.
+func (client DatabaseClient) UnmountDbnodeSnapshot(ctx context.Context, request UnmountDbnodeSnapshotRequest) (response UnmountDbnodeSnapshotResponse, err error) {
+	var ociResponse common.OCIResponse
+	policy := common.NoRetryPolicy()
+	if client.RetryPolicy() != nil {
+		policy = *client.RetryPolicy()
+	}
+	if request.RetryPolicy() != nil {
+		policy = *request.RetryPolicy()
+	}
+
+	if !(request.OpcRetryToken != nil && *request.OpcRetryToken != "") {
+		request.OpcRetryToken = common.String(common.RetryToken())
+	}
+
+	ociResponse, err = common.Retry(ctx, request, client.unmountDbnodeSnapshot, policy)
+	if err != nil {
+		if ociResponse != nil {
+			if httpResponse := ociResponse.HTTPResponse(); httpResponse != nil {
+				opcRequestId := httpResponse.Header.Get("opc-request-id")
+				response = UnmountDbnodeSnapshotResponse{RawResponse: httpResponse, OpcRequestId: &opcRequestId}
+			} else {
+				response = UnmountDbnodeSnapshotResponse{}
+			}
+		}
+		return
+	}
+	if convertedResponse, ok := ociResponse.(UnmountDbnodeSnapshotResponse); ok {
+		response = convertedResponse
+	} else {
+		err = fmt.Errorf("failed to convert OCIResponse into UnmountDbnodeSnapshotResponse")
+	}
+	return
+}
+
+// unmountDbnodeSnapshot implements the OCIOperation interface (enables retrying operations)
+func (client DatabaseClient) unmountDbnodeSnapshot(ctx context.Context, request common.OCIRequest, binaryReqBody *common.OCIReadSeekCloser, extraHeaders map[string]string) (common.OCIResponse, error) {
+
+	httpRequest, err := request.HTTPRequest(http.MethodPost, "/dbnodeSnapshots/{dbnodeSnapshotId}/actions/unmount", binaryReqBody, extraHeaders)
+	if err != nil {
+		return nil, err
+	}
+
+	var response UnmountDbnodeSnapshotResponse
+	var httpResponse *http.Response
+	httpResponse, err = client.Call(ctx, &httpRequest)
+	defer common.CloseBodyIfValid(httpResponse)
+	response.RawResponse = httpResponse
+	if err != nil {
+		apiReferenceLink := "https://docs.oracle.com/iaas/api/#/en/database/20160918/DbnodeSnapshot/UnmountDbnodeSnapshot"
+		err = common.PostProcessServiceError(err, "Database", "UnmountDbnodeSnapshot", apiReferenceLink)
+		return response, err
+	}
+
+	err = common.UnmarshalResponse(httpResponse, &response)
+	return response, err
+}
+
 // UnregisterCloudVmClusterPkcs Uninstall the PKCS11 driver for given keystore type
 //
 // # See also
@@ -22932,7 +23351,7 @@ func (client DatabaseClient) updateAutonomousContainerDatabaseDataguardAssociati
 	return response, err
 }
 
-// UpdateAutonomousDatabase Updates one or more attributes of the specified Autonomous Database. See the UpdateAutonomousDatabaseDetails resource for a full list of attributes that can be updated.
+// UpdateAutonomousDatabase Updates one or more attributes of the specified Autonomous AI Database. See the UpdateAutonomousDatabaseDetails resource for a full list of attributes that can be updated.
 //
 // # See also
 //
@@ -22989,7 +23408,7 @@ func (client DatabaseClient) updateAutonomousDatabase(ctx context.Context, reque
 	return response, err
 }
 
-// UpdateAutonomousDatabaseBackup Updates the Autonomous Database backup of the specified database based on the request parameters.
+// UpdateAutonomousDatabaseBackup Updates the Autonomous AI Database backup of the specified database based on the request parameters.
 //
 // # See also
 //
@@ -23046,7 +23465,7 @@ func (client DatabaseClient) updateAutonomousDatabaseBackup(ctx context.Context,
 	return response, err
 }
 
-// UpdateAutonomousDatabaseRegionalWallet Updates the Autonomous Database regional wallet.
+// UpdateAutonomousDatabaseRegionalWallet Updates the Autonomous AI Database regional wallet.
 //
 // # See also
 //
@@ -23103,7 +23522,7 @@ func (client DatabaseClient) updateAutonomousDatabaseRegionalWallet(ctx context.
 	return response, err
 }
 
-// UpdateAutonomousDatabaseSoftwareImage Updates the properties of an Autonomous Database Software Image, like add tags
+// UpdateAutonomousDatabaseSoftwareImage Updates the properties of an Autonomous AI Database Software Image, like add tags
 //
 // # See also
 //
@@ -23160,7 +23579,7 @@ func (client DatabaseClient) updateAutonomousDatabaseSoftwareImage(ctx context.C
 	return response, err
 }
 
-// UpdateAutonomousDatabaseWallet Updates the wallet for the specified Autonomous Database.
+// UpdateAutonomousDatabaseWallet Updates the wallet for the specified Autonomous AI Database.
 //
 // # See also
 //
@@ -23504,7 +23923,7 @@ func (client DatabaseClient) updateCloudAutonomousVmCluster(ctx context.Context,
 	return response, err
 }
 
-// UpdateCloudExadataInfrastructure Updates the Cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous Database on dedicated Exadata infrastructure only.
+// UpdateCloudExadataInfrastructure Updates the Cloud Exadata infrastructure resource. Applies to Exadata Cloud Service instances and Autonomous AI Database on dedicated Exadata infrastructure only.
 //
 // # See also
 //

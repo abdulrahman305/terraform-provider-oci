@@ -9,9 +9,6 @@ description: |-
 
 # oci_database_database
 This resource provides the Database resource in Oracle Cloud Infrastructure Database service.
-Api doc link for the resource: https://docs.oracle.com/iaas/api/#/en/database/latest/Database
-
-Example terraform configs related to the resource : https://github.com/oracle/terraform-provider-oci/tree/master/examples/database
 
 Creates a new database in the specified Database Home. If the database version is provided, it must match the version of the Database Home. Applies only to Exadata systems.
 
@@ -61,7 +58,9 @@ resource "oci_database_database" "test_database" {
 			provider_type = var.database_database_encryption_key_location_details_provider_type
 
 			#Optional
+			aws_encryption_key_id = oci_kms_key.test_key.id
 			azure_encryption_key_id = oci_kms_key.test_key.id
+			google_cloud_provider_encryption_key_id = oci_kms_key.test_key.id
 			hsm_password = var.database_database_encryption_key_location_details_hsm_password
 		}
 		freeform_tags = var.database_database_freeform_tags
@@ -80,16 +79,17 @@ resource "oci_database_database" "test_database" {
 			provider_type = var.database_database_source_encryption_key_location_details_provider_type
 
 			#Optional
+			aws_encryption_key_id = oci_kms_key.test_key.id
 			azure_encryption_key_id = oci_kms_key.test_key.id
+			google_cloud_provider_encryption_key_id = oci_kms_key.test_key.id
 			hsm_password = var.database_database_source_encryption_key_location_details_hsm_password
 		}
-		
+		source_tde_wallet_password = var.database_database_source_tde_wallet_password
 		storage_size_details {
 			#Required
 			data_storage_size_in_gb = var.database_database_storage_size_details_data_storage_size_in_gb
 			reco_storage_size_in_gbs = var.database_database_storage_size_details_reco_storage_size_in_gbs
 		}
-		source_tde_wallet_password = var.database_database_source_tde_wallet_password
 		tde_wallet_password = var.database_database_tde_wallet_password
 		transport_type = var.database_database_transport_type
 		vault_id = oci_kms_vault.test_vault.id
@@ -126,7 +126,7 @@ The following arguments are supported:
 		* `auto_backup_window` - (Applicable when source=NONE) (Updatable) Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).  Example: `SLOT_TWO` 
 		* `auto_full_backup_day` - (Applicable when source=NONE) Day of the week the full backup should be applied on the database system. If no option is selected, the value is null and we will default to Sunday.
 		* `auto_full_backup_window` - (Applicable when source=NONE) Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).  Example: `SLOT_TWO` 
-		* `backup_deletion_policy` - (Applicable when source=NONE) This defines when the backups will be deleted. - IMMEDIATE option keep the backup for predefined time i.e 72 hours and then delete permanently... - RETAIN will keep the backups as per the policy defined for database backups.
+		* `backup_deletion_policy` - (Applicable when source=NONE) This defines when the backups will be deleted. - DELETE_IMMEDIATELY option keep the backup for predefined time i.e 72 hours and then delete permanently... - DELETE_AFTER_RETENTION_PERIOD will keep the backups as per the policy defined for database backups.
 		* `backup_destination_details` - (Applicable when source=NONE) Backup destination details.
 			* `backup_retention_policy_on_terminate` - (Applicable when source=NONE) Defines the automatic and manual backup retention policy for the Autonomous Database termination.  The retention policy set on the Autonomous Container Database is not applicable for cross region remote backups and backups hosted on recovery Appliance backup destination. Options are 'RETAIN_PER_RETENTION_WINDOW' or 'RETAIN_FOR_72_HOURS'.The default value is 'RETAIN_FOR_72_HOURS'. 
 			* `dbrs_policy_id` - (Applicable when source=NONE) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DBRS policy used for backup.
@@ -144,14 +144,16 @@ The following arguments are supported:
 		The database workload type. 
 	* `defined_tags` - (Optional) (Updatable) Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). 
 	* `encryption_key_location_details` - (Applicable when source=NONE) Types of providers supported for managing database encryption keys
+		* `aws_encryption_key_id` - (Required when provider_type=AWS) Provide the key OCID of a registered AWS key.
 		* `azure_encryption_key_id` - (Required when provider_type=AZURE) Provide the key OCID of a registered Azure key.
+        * `google_cloud_provider_encryption_key_id` - (Required when provider_type=GCP) Provide the key OCID of a registered GCP key.
 		* `hsm_password` - (Required when provider_type=EXTERNAL) Provide the HSM password as you would in RDBMS for External HSM.
-		* `provider_type` - (Required) Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. 
+		* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. Use 'AWS' for creating a new database or migrating a database key to Aws. Use 'GCP' for creating a new database or migrating a database key to Gcp.
 	* `freeform_tags` - (Optional) (Updatable) Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{"Department": "Finance"}` 
 	* `is_active_data_guard_enabled` - (Applicable when source=DATAGUARD) True if active Data Guard is enabled.
 	* `key_store_id` - (Applicable when source=NONE) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key store of Oracle Vault.
 	* `kms_key_id` - (Applicable when source=NONE) The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
-	* `kms_key_version_id` - (Applicable when source=NONE) The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous Database Serverless does not use key versions, hence is not applicable for Autonomous Database Serverless instances. 
+	* `kms_key_version_id` - (Applicable when source=NONE) The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous AI Database Serverless does not use key versions, hence is not applicable for Autonomous AI Database Serverless instances. 
 	* `ncharacter_set` - (Applicable when source=NONE) The national character set for the database.  The default is AL16UTF16. Allowed values are: AL16UTF16 or UTF8. 
 	* `pdb_name` - (Applicable when source=NONE) The name of the pluggable database. The name must begin with an alphabetic character and can contain a maximum of thirty alphanumeric characters. Special characters are not permitted. Pluggable database should not be same as database name.
 	* `pluggable_databases` - (Applicable when source=DB_BACKUP) The list of pluggable databases that needs to be restored into new database.
@@ -159,13 +161,15 @@ The following arguments are supported:
 	* `sid_prefix` - (Optional) Specifies a prefix for the `Oracle SID` of the database to be created. 
 	* `source_database_id` - (Required when source=DATAGUARD) The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the source database.
 	* `source_encryption_key_location_details` - (Applicable when source=DATAGUARD | DB_BACKUP) Types of providers supported for managing database encryption keys
+		* `aws_encryption_key_id` - (Required when provider_type=AWS) Provide the key OCID of a registered AWS key.
 		* `azure_encryption_key_id` - (Required when provider_type=AZURE) Provide the key OCID of a registered Azure key.
+        * `google_cloud_provider_encryption_key_id` - (Required when provider_type=GCP) Provide the key OCID of a registered GCP key.
 		* `hsm_password` - (Required when provider_type=EXTERNAL) Provide the HSM password as you would in RDBMS for External HSM.
-		* `provider_type` - (Required) Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. 
+		* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. Use 'AWS' for creating a new database or migrating a database key to Aws. Use 'GCP' for creating a new database or migrating a database key to Gcp.
 	* `source_tde_wallet_password` - (Required when source=DATAGUARD) The TDE wallet password of the source database specified by 'sourceDatabaseId'.
 	* `storage_size_details` - (Optional) The database storage size details. This database option is supported for the Exadata VM cluster on Exascale Infrastructure. 
-		* `data_storage_size_in_gb` - (Required) (Updatable) The DATA storage size, in gigabytes, that is applicable for the database. 
-		* `reco_storage_size_in_gbs` - (Required) (Updatable) The RECO storage size, in gigabytes, that is applicable for the database. 
+		* `data_storage_size_in_gb` - (Required) The DATA storage size, in gigabytes, that is applicable for the database. 
+		* `reco_storage_size_in_gbs` - (Required) The RECO storage size, in gigabytes, that is applicable for the database. 
 	* `tde_wallet_password` - (Applicable when source=NONE) The optional password to open the TDE wallet. The password must be at least nine characters and contain at least two uppercase, two lowercase, two numeric, and two special characters. The special characters must be _, \#, or -.
 	* `transport_type` - (Required when source=DATAGUARD) The redo transport type to use for this Data Guard association.  Valid values depend on the specified `protectionMode`:
 		* MAXIMUM_AVAILABILITY - SYNC or FASTSYNC
@@ -181,7 +185,7 @@ The following arguments are supported:
 
 	This cannot be updated in parallel with any of the following: licenseModel, dbEdition, cpuCoreCount, computeCount, computeModel, adminPassword, whitelistedIps, isMTLSConnectionRequired, openMode, permissionLevel, dbWorkload, privateEndpointLabel, nsgIds, isRefreshable, dbName, scheduledOperations, dbToolsDetails, isLocalDataGuardEnabled, or isFreeTier. 
 * `kms_key_id` - (Optional) The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
-* `kms_key_version_id` - (Optional) The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous Database Serverless does not use key versions, hence is not applicable for Autonomous Database Serverless instances. 
+* `kms_key_version_id` - (Optional) The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous AI Database Serverless does not use key versions, hence is not applicable for Autonomous AI Database Serverless instances. 
 * `source` - (Required) The source of the database: Use `NONE` for creating a new database. Use `DB_BACKUP` for creating a new database by restoring from a backup. Use `DATAGUARD` for creating a new STANDBY database for a Data Guard setup.. The default is `NONE`. 
 * `set_key_version_trigger` - (Optional) (Updatable) An optional property when incremented triggers Set Key Version. Could be set to any integer value.
 
@@ -203,10 +207,16 @@ The following attributes are exported:
 	* `members` - List of Data Guard members, representing each database that is part of Data Guard.
 		* `apply_lag` - The lag time between updates to the primary database and application of the redo data on the standby database, as computed by the reporting database.  Example: `1 second` 
 		* `apply_rate` - The rate at which redo logs are synced between the associated databases.  Example: `102.96 MByte/s` 
+		* `data_loss_exposure` - The Data loss exposure is the redo transport lag between the primary and standby databases.   Example: `2 seconds` 
 		* `database_id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the Database.
 		* `db_system_id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DB system, Cloud VM cluster or VM cluster.
+		* `failover_readiness` - The failover readiness status of the Data Guard member. 
+		* `failover_readiness_message` - The message explaining failover readiness status. Example: `This standby database is not failover ready.` 
 		* `is_active_data_guard_enabled` - True if active Data Guard is enabled.
 		* `role` - The role of the reporting database in this Data Guard association.
+		* `switchover_readiness` - The switchover readiness status of the Data Guard member. 
+		* `switchover_readiness_message` - The message explaining switchover readiness status. Example: `Address failed checks to avoid extended downtime.` 
+		* `time_updated` - The date and time when the last successful Data Guard refresh occurred.
 		* `transport_lag` - The rate at which redo logs are transported between the associated databases.  Example: `1 second` 
 		* `transport_lag_refresh` - The date and time when last redo transport has been done.
 		* `transport_type` - The redo transport type to use for this Data Guard association.  Valid values depend on the specified `protectionMode`:
@@ -227,7 +237,7 @@ The following attributes are exported:
 	* `auto_backup_window` - Time window selected for initiating automatic backup for the database system. There are twelve available two-hour time windows. If no option is selected, a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).  Example: `SLOT_TWO` 
 	* `auto_full_backup_day` - Day of the week the full backup should be applied on the database system. If no option is selected, the value is null and we will default to Sunday.
 	* `auto_full_backup_window` - Time window selected for initiating full backup for the database system. There are twelve available two-hour time windows. If no option is selected, the value is null and a start time between 12:00 AM to 7:00 AM in the region of the database is automatically chosen. For example, if the user selects SLOT_TWO from the enum list, the automatic backup job will start in between 2:00 AM (inclusive) to 4:00 AM (exclusive).  Example: `SLOT_TWO` 
-	* `backup_deletion_policy` - This defines when the backups will be deleted. - IMMEDIATE option keep the backup for predefined time i.e 72 hours and then delete permanently... - RETAIN will keep the backups as per the policy defined for database backups.
+	* `backup_deletion_policy` - This defines when the backups will be deleted. - DELETE_IMMEDIATELY option keep the backup for predefined time i.e 72 hours and then delete permanently... - DELETE_AFTER_RETENTION_PERIOD will keep the backups as per the policy defined for database backups.
 	* `backup_destination_details` - Backup destination details.
 		* `backup_retention_policy_on_terminate` - Defines the automatic and manual backup retention policy for the Autonomous Database termination.  The retention policy set on the Autonomous Container Database is not applicable for cross region remote backups and backups hosted on recovery Appliance backup destination. Options are 'RETAIN_PER_RETENTION_WINDOW' or 'RETAIN_FOR_72_HOURS'.The default value is 'RETAIN_FOR_72_HOURS'. 
 		* `dbrs_policy_id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the DBRS policy used for backup.
@@ -247,16 +257,18 @@ The following attributes are exported:
 	The database workload type. 
 * `defined_tags` - Defined tags for this resource. Each key is predefined and scoped to a namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm). 
 * `encryption_key_location_details` - Types of providers supported for managing database encryption keys
+	* `aws_encryption_key_id` - Provide the key OCID of a registered AWS key.
 	* `azure_encryption_key_id` - Provide the key OCID of a registered Azure key.
+    * `google_cloud_provider_encryption_key_id` - Provide the key OCID of a registered GCP key.
 	* `hsm_password` - Provide the HSM password as you would in RDBMS for External HSM.
-	* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. 
+	* `provider_type` - Use 'EXTERNAL' for creating a new database or migrating a database key to an External HSM. Use 'AZURE' for creating a new database or migrating a database key to Azure. Use 'AWS' for creating a new database or migrating a database key to Aws. Use 'GCP' for creating a new database or migrating a database key to Gcp.
 * `freeform_tags` - Free-form tags for this resource. Each tag is a simple key-value pair with no predefined name, type, or namespace. For more information, see [Resource Tags](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcetags.htm).  Example: `{"Department": "Finance"}` 
 * `id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the database.
 * `is_cdb` - True if the database is a container database.
 * `key_store_id` - The [OCID](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm) of the key store of Oracle Vault.
 * `key_store_wallet_name` - The wallet name for Oracle Key Vault.
 * `kms_key_id` - The OCID of the key container that is used as the master encryption key in database transparent data encryption (TDE) operations.
-* `kms_key_version_id` - The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous Database Serverless does not use key versions, hence is not applicable for Autonomous Database Serverless instances. 
+* `kms_key_version_id` - The OCID of the key container version that is used in database transparent data encryption (TDE) operations KMS Key can have multiple key versions. If none is specified, the current key version (latest) of the Key Id is used for the operation. Autonomous AI Database Serverless does not use key versions, hence is not applicable for Autonomous AI Database Serverless instances. 
 * `last_backup_duration_in_seconds` - The duration when the latest database backup created.
 * `last_backup_timestamp` - The date and time when the latest database backup was created.
 * `last_failed_backup_timestamp` - The date and time when the latest database backup failed.

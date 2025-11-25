@@ -1,3 +1,71 @@
+## 7.27.0 (November 20, 2025)
+
+### Added
+- Support for Marketplace Service Catalog Access Control feature
+- Support for Compute: GPU Memory Fabric API - Firmware Pinning
+- Support for Refresh Exa Dataguard Health
+- Support for AWS integration for DB@AWS - DBMCI
+- Support for Private Service Access
+- Support for GGS Zero ETL Usability Improvements
+- Support for Zero-Trust Packet Routing (ZPR) Security Attribute Onboarding for bastion service
+- Support for IPv6 and Reserved IPs in API Gateway
+- Support for IoT actions APIs and spec bug fixes
+- Support for [Terraform] Support AWS KMS integration for DB@AWS
+- Support for Data Catalog - ZPR Intercom
+- Revert SIGINT changes for ODSC
+- config for retries
+
+### Bug Fix
+- added support for real resource for Autonomous CC
+
+## 7.26.1 (November 13, 2025)
+- Reverted Support for Passing TF CLI context to Go SDK
+
+## 7.26.0 (November 12, 2025)
+
+### Added
+- Deprecation message
+- Support for Passing TF CLI context to Go SDK
+- support for Fleet Application Management Service 2.0.3
+- Support for Multi-Shape Family Virtual Machine Instances on Dedicated Virtual Machine Hosts
+- Support for [Multi Cloud Limits] - Add support for allocating limits by partner cloud
+- Support for OKE: Kubernetes Versions Format API update
+- lookup image by URI
+
+## 7.25.0 (November 4, 2025)
+
+### Added
+- Support for new service Data Intelligence Foundation
+- Support for VM Instance - Snapshot/Restore Read only
+- ZPR and PSA support
+- Support for IPA-Graceful Termination of Instance in Instance Pool
+
+### Bug Fix
+- make test compile failure
+
+## 7.24.0 (October 29, 2025)
+
+### Added
+- Support for HeatWave MySQL Service: Configurable Version Upgrade Policies
+- Support for ADBS: Autonomous Name Change
+- Support for Oracle Cloud AI Services Language - Enhancement-Rel4.2
+- Support for LBaaS Support for online conversion of IPv4 LB to dual stack IPv4 and IPv6
+- Support for ADB-S: Vanity URL support using API Gateway
+- Support for Lustre File Service: LFS Object Storage Bi-Directional Sync
+- support for Database Tools Identity
+- Support for Support for Apple as a Social IDP
+- Support for Zero-Trust Packet Routing (ZPR) Security Attribute Onboarding for File Storage Service
+- FSDR support for database events integration
+- Support for Zero-Trust Packet Routing (ZPR) Security Attribute Onboarding for Streaming Service
+- Support for JMS common variables
+- Support for Host API - Add computeHostInSubtree query param to existing ListComputeHosts api.
+- Support for (ORM-174501 GA-2) IPv4-Prefix-for-Subnet & Flexible CIDR support for secondary IPs on VNIC
+- support for Dual Stack Endpoint
+- entry in ChangeLog
+
+### Bug Fix
+- secret id fix and other test case fixes
+
 ## 7.23.0 (October 22, 2025)
 
 ### Added
@@ -11,6 +79,7 @@
 - Support for JMS common variables
 - Fix devops deploy helm stage set_values and set_string bug
 - API Doc link and example link to resource doc
+- Support for OCI Data Science - ML Pipelines - Parameterized pipelines
 
 ### Bug Fix
 - for resourcemanager in provider version 7.22
